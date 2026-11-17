@@ -33,7 +33,7 @@ This machine also has a project-local PostgreSQL cluster in `.pgdata` on port 54
 
 - `npm run dev` starts the API with `tsx watch`
 - `npm test` runs the Vitest and Supertest suite
-- `npm run build` compiles TypeScript
+- `npm run build` regenerates the Prisma client, then compiles TypeScript
 
 ## Providers that stay unwired
 

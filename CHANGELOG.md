@@ -3,6 +3,7 @@
 ## 0.1.1
 
 - The consultation medicine catalogue lists each generic name, strength, and dosage form as its own product. A prescription dose is entered for the patient and is not copied from the product strength.
+- The production build regenerates the Prisma client before TypeScript compiles, so catalog fields such as laboratory `section` are present.
 - Corporate investigation prices are stored on the laboratory catalog. A missing test or medicine is created at startup so the consultation catalog can show it.
 - A patient can rate a consultation after the call ends, including before the note is signed. Skipping the rating does not save one.
 - Desk officers 2 and 3 collect pharmacy, laboratory, and scan work for physical visits only.
