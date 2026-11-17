@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.1
+
+- Pointed local setup at Azure Database for PostgreSQL through `npm run db:azure`, which builds `DATABASE_URL` from a Microsoft Entra access token.
+- Generated the access, refresh, and video HMAC secrets in `.env`. Dummy Paystack keys stay unset for live charges.
+
 ## 0.1.0
 
 - Added the Express, TypeScript, Prisma, and PostgreSQL API for the OOUTH frontend contract.

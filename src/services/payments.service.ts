@@ -6,7 +6,7 @@ import { notifyUser, writeAudit } from "../lib/audit";
 import { ApiError, badRequest, conflict, forbidden, notFound } from "../lib/errors";
 import { publicAppointment } from "../lib/present";
 import { lagosCalendarYear } from "../domain/scheduling";
-import type { PaystackClient } from "../providers";
+import { paystackSecret, type PaystackClient } from "../providers";
 import { requireUser, slotKey } from "./shared";
 
 export function createPaymentService(prisma: PrismaClient, env: Env, paystack: PaystackClient) {
@@ -20,7 +20,7 @@ export function createPaymentService(prisma: PrismaClient, env: Env, paystack: P
       if (appointment.status === "cancelled") throw conflict("This visit is cancelled.");
       const amountNaira = appointment.pendingStartsAt ? appointment.rescheduleFeeNaira : appointment.amountNaira;
       if (appointment.paymentStatus === "verified" && !appointment.pendingStartsAt) throw conflict("This visit is already paid.");
-      if (!env.PAYSTACK_SECRET_KEY) throw new ApiError(503, "payment_unavailable", "Card payment is not configured yet.");
+      if (!paystackSecret(env)) throw new ApiError(503, "payment_unavailable", "Card payment is not configured yet.");
       const reference = `OOUTH-PAY-${randomBytes(6).toString("hex")}`;
       const purpose = appointment.pendingStartsAt ? "reschedule" : "visit";
       await prisma.payment.create({
@@ -44,8 +44,9 @@ export function createPaymentService(prisma: PrismaClient, env: Env, paystack: P
     },
 
     async webhook(rawBody: Buffer, signature: string | undefined) {
-      if (!env.PAYSTACK_SECRET_KEY) throw new ApiError(503, "payment_unavailable", "Card payment is not configured yet.");
-      const digest = createHmac("sha512", env.PAYSTACK_SECRET_KEY).update(rawBody).digest("hex");
+      const secret = paystackSecret(env);
+      if (!secret) throw new ApiError(503, "payment_unavailable", "Card payment is not configured yet.");
+      const digest = createHmac("sha512", secret).update(rawBody).digest("hex");
       if (!signature || signature !== digest) throw forbidden("The payment notification could not be verified.");
       const payload = JSON.parse(rawBody.toString("utf8")) as { event?: string; data?: { reference?: string } };
       if (payload.event !== "charge.success" || !payload.data?.reference) return { ignored: true };

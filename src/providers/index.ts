@@ -50,8 +50,14 @@ export type PaystackClient = {
   verify: (reference: string) => Promise<PaystackVerify>;
 };
 
+export function paystackSecret(env: Env) {
+  const key = env.PAYSTACK_SECRET_KEY.trim();
+  if (!key || key.includes("dummy")) return "";
+  return key;
+}
+
 export function createPaystack(env: Env): PaystackClient {
-  const secret = env.PAYSTACK_SECRET_KEY;
+  const secret = paystackSecret(env);
   return {
     async initialize(input) {
       if (!secret) throw new Error("Paystack is not configured.");
