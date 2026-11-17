@@ -320,11 +320,12 @@ Socket.IO on the same API origin authenticates the `oouth_access` cookie. Signal
 
 ### POST /api/payments/initialize
 
-- Purpose: create a Paystack authorization for an appointment. The secret stays on the server. The callback is `{FRONTEND_ORIGIN}/patient/payments/return`.
+- Purpose: create the payment for an appointment. A live Paystack secret returns a checkout URL. The callback is `{FRONTEND_ORIGIN}/patient/payments/return`. While the secret is empty or contains `dummy`, the same request records the payment as verified so booking can continue during testing.
 - Permission: the patient who owns the appointment.
 - Request body: `{ "appointmentId": "uuid" }`
-- Response example: `{ "data": { "authorizationUrl": "https://checkout.paystack.com/example", "reference": "OOUTH-PAY-1" } }`
-- Errors: 503 `payment_unavailable` when `PAYSTACK_SECRET_KEY` is empty. 403 for another patient's appointment.
+- Response example: `{ "data": { "authorizationUrl": "https://checkout.paystack.com/example", "reference": "OOUTH-PAY-1", "paid": false, "testPayment": false } }`
+- Test response example: `{ "data": { "reference": "OOUTH-PAY-1", "paid": true, "testPayment": true, "appointment": { "status": "confirmed", "paymentStatus": "verified" } } }`
+- Errors: 403 for another patient's appointment. 409 when the visit is already paid or cancelled.
 
 ### POST /api/payments/verify
 

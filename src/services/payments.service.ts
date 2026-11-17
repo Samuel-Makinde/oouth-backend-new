@@ -20,12 +20,16 @@ export function createPaymentService(prisma: PrismaClient, env: Env, paystack: P
       if (appointment.status === "cancelled") throw conflict("This visit is cancelled.");
       const amountNaira = appointment.pendingStartsAt ? appointment.rescheduleFeeNaira : appointment.amountNaira;
       if (appointment.paymentStatus === "verified" && !appointment.pendingStartsAt) throw conflict("This visit is already paid.");
-      if (!paystackSecret(env)) throw new ApiError(503, "payment_unavailable", "Card payment is not configured yet.");
       const reference = `OOUTH-PAY-${randomBytes(6).toString("hex")}`;
       const purpose = appointment.pendingStartsAt ? "reschedule" : "visit";
       await prisma.payment.create({
         data: { appointmentId: appointment.id, patientUserId: user.id, reference, purpose, amountNaira, status: "pending" },
       });
+      if (!paystackSecret(env)) {
+        await writeAudit(prisma, user.id, "payment.initialize", `Recorded test payment ${reference} for ${appointment.reference}`, { type: "payment", id: reference });
+        const settled = await applyVerifiedPayment(prisma, reference);
+        return { reference, paid: true, testPayment: true, appointment: settled.appointment };
+      }
       const started = await paystack.initialize({
         email: user.email,
         amountKobo: amountNaira * 100,
@@ -35,7 +39,7 @@ export function createPaymentService(prisma: PrismaClient, env: Env, paystack: P
       });
       await prisma.appointment.update({ where: { id: appointment.id }, data: { paymentReference: reference, paymentStatus: "pending_verification" } });
       await writeAudit(prisma, user.id, "payment.initialize", `Started ${reference} for ${appointment.reference}`, { type: "payment", id: reference });
-      return { authorizationUrl: started.authorizationUrl, reference: started.reference, publicKey: env.PAYSTACK_PUBLIC_KEY };
+      return { authorizationUrl: started.authorizationUrl, reference: started.reference, publicKey: env.PAYSTACK_PUBLIC_KEY, paid: false, testPayment: false };
     },
 
     async verify(userId: string | null, body: unknown) {
@@ -74,8 +78,12 @@ async function settle(prisma: PrismaClient, paystack: PaystackClient, reference:
     await prisma.appointment.update({ where: { id: payment.appointmentId }, data: { paymentStatus: "failed" } });
     throw new ApiError(402, "payment_failed", "The payment was not successful.");
   }
+  return applyVerifiedPayment(prisma, reference);
+}
+
+async function applyVerifiedPayment(prisma: PrismaClient, reference: string) {
   const appointment = await prisma.$transaction(async (tx) => {
-    const current = await tx.payment.findUnique({ where: { id: payment.id } });
+    const current = await tx.payment.findUnique({ where: { reference } });
     if (!current) throw notFound("That payment was not found.");
     if (current.status === "verified") {
       const existing = await tx.appointment.findUnique({ where: { id: current.appointmentId } });

@@ -3,6 +3,7 @@ import { PrismaClient } from "@prisma/client";
 import request from "supertest";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { createApp } from "./app";
+import { createPaymentService } from "./services/payments.service";
 import { loadEnv } from "./config/env";
 import { createObjectStorage, type PaystackClient } from "./providers";
 
@@ -96,7 +97,7 @@ describe("hospital API", () => {
   });
 
   it("keeps one slot for one visit and confirms a Paystack reference only once", async () => {
-    const slots = await request(app).get("/api/departments/medicine/slots").query({ date: "2026-11-16", type: "virtual" });
+    const slots = await request(app).get("/api/departments/medicine/slots").query({ date: "2026-11-18", type: "virtual" });
     expect(slots.status).toBe(200);
     const slot = slots.body.data[0];
     expect(slot?.startsAt).toBeTruthy();
@@ -136,6 +137,25 @@ describe("hospital API", () => {
     expect(again.status).toBe(200);
     expect(again.body.data.duplicate).toBe(true);
     expect(await prisma.payment.count({ where: { reference, status: "verified" } })).toBe(1);
+
+    const later = slots.body.data[1];
+    expect(later?.startsAt).toBeTruthy();
+    const bookedLater = await first.post("/api/appointments").send({
+      departmentSlug: "medicine",
+      consultationType: "virtual",
+      startsAt: later.startsAt,
+      reason: "Follow-up headache",
+      privacyConsent: true,
+      telemedicineConsent: true,
+    });
+    expect(bookedLater.status).toBe(201);
+    const owner = await prisma.user.findUnique({ where: { email: patient.email } });
+    const testPayments = createPaymentService(prisma, { ...env, PAYSTACK_SECRET_KEY: "sk_test_dummy_oouth_not_live" }, paystack);
+    const settled = await testPayments.initialize(owner!.id, { appointmentId: bookedLater.body.data.id });
+    expect(settled.paid).toBe(true);
+    expect(settled.testPayment).toBe(true);
+    expect(settled.appointment?.status).toBe("confirmed");
+    expect(settled.appointment?.paymentStatus).toBe("verified");
   });
 
   it("rejects a stale draft, requires a real consultation before signing, and blocks a repeat signature", async () => {

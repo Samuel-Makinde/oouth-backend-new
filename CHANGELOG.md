@@ -2,6 +2,7 @@
 
 ## 0.1.1
 
+- While Paystack is not configured, Pay with Paystack records the visit payment as verified and the booking screens show a payment-successful popup.
 - Production startup applies Prisma migrations and, on an empty database, loads departments, fees, and preview staff so patient registration has a `User` table.
 - Registration and login behind Render no longer fail when `X-Forwarded-For` is present. Express trusts one proxy hop, and session cookies use SameSite=None; Secure for a frontend on another site.
 - Added consultation audio and video calls. Socket.IO signals the patient and assigned consultant. WebRTC carries the media. `GET /api/calls/ice-config` returns STUN and optional TURN servers from the environment.

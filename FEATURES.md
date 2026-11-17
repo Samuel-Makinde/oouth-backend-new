@@ -4,7 +4,7 @@
 - Role checks for patient, consultant, administrator, desk officer, nurse, pharmacist, and laboratory officer
 - Departments, consultants, availability, and weekday slots in Africa/Lagos
 - Online booking onto the super consultant, with one active booking per slot
-- Paystack initialize, verify, and signed webhook, each reference applied once
+- Paystack initialize, verify, and signed webhook, each reference applied once. A dummy or empty Paystack secret records the same payment as verified for testing.
 - Desk registration, walk-in visits, fictional desk payments, check-in, queue status, and request collection
 - Encounter drafts with revision checks and idempotency keys, plus an explicit sign action
 - Signed consultations fan out to journeys, pharmacy lines, and investigation orders
