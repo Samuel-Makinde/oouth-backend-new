@@ -1,5 +1,5 @@
-import { Router } from "express";
-import rateLimit from "express-rate-limit";
+import { Router, type Request } from "express";
+import rateLimit, { ipKeyGenerator } from "express-rate-limit";
 import multer from "multer";
 import type { Env } from "../config/env";
 import { accessCookieName, issueSession, readAccessToken, refreshCookieName } from "../lib/auth";
@@ -26,7 +26,13 @@ export function createRouter(env: Env, mailer: Mailer, storage: ObjectStorage, p
   const encounters = createEncounterService(prisma, mailer, storage);
   const operations = createOperationsService(prisma);
   const workspace = createWorkspaceService(prisma);
-  const limit = rateLimit({ windowMs: 15 * 60 * 1000, limit: 30, standardHeaders: true, legacyHeaders: false });
+  const limit = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    limit: 30,
+    standardHeaders: true,
+    legacyHeaders: false,
+    keyGenerator: (req: Request) => ipKeyGenerator(req.get("cf-connecting-ip")?.split(",")[0]?.trim() || req.ip || "unknown"),
+  });
 
   router.get("/health", (_req, res) => sendData(res, { ok: true }));
 

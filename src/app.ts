@@ -12,8 +12,9 @@ import type { JobQueue, Mailer, ObjectStorage, PaystackClient } from "./provider
 
 export function createApp(env: Env, mailer: Mailer, storage: ObjectStorage, paystack: PaystackClient, queue: JobQueue) {
   const app = express();
+  app.set("trust proxy", 1);
   app.disable("x-powered-by");
-  app.use(helmet());
+  app.use(helmet({ crossOriginResourcePolicy: { policy: "cross-origin" } }));
   app.use(cors({ origin: env.FRONTEND_ORIGIN, credentials: true }));
   app.use(pinoHttp({ autoLogging: env.NODE_ENV !== "test" }));
   app.use("/api/payments/webhook", express.raw({ type: "application/json" }));

@@ -42,6 +42,7 @@ export function errorHandler(error: unknown, _req: Request, res: Response, _next
     res.status(409).json({ error: { code: "conflict", message: "That record already exists." } });
     return;
   }
+  console.error(error);
   res.status(500).json({ error: { code: "server_error", message: "The hospital service could not complete that request." } });
 }
 

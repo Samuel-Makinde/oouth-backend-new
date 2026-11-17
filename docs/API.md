@@ -4,7 +4,7 @@ Base URL: `http://localhost:4000/api`. Swagger UI: `/api/docs`.
 
 Every JSON response is `{ "data": ... }` or `{ "error": { "code": "", "message": "" } }`. Times are ISO-8601. Amounts are naira. The hospital zone is `Africa/Lagos`.
 
-Signed-in routes read the `oouth_access` cookie. `POST /api/auth/refresh` rotates the `oouth_refresh` cookie. Both cookies are httpOnly and SameSite=lax.
+Signed-in routes read the `oouth_access` cookie. `POST /api/auth/refresh` rotates the `oouth_refresh` cookie. Both cookies are httpOnly. They are SameSite=lax when the page and API share a site, and SameSite=None; Secure when the page origin is another site, such as local `http://localhost:3000` calling the Render API.
 
 ## Shared errors
 

@@ -47,23 +47,40 @@ export function readAccessToken(env: Env, token: string) {
   }
 }
 
-export function cookieBase(env: Env) {
+function siteName(host: string) {
+  const hostname = host.replace(/:\d+$/, "").replace(/^\[|\]$/g, "").toLowerCase();
+  if (hostname === "localhost" || hostname === "127.0.0.1" || hostname === "::1") return "localhost";
+  const parts = hostname.split(".").filter(Boolean);
+  return parts.length <= 2 ? hostname : parts.slice(-2).join(".");
+}
+
+export function cookieBase(env: Env, res: Response) {
+  const req = res.req;
+  const origin = req?.get("origin");
+  let crossSite = false;
+  if (origin && req) {
+    try {
+      crossSite = siteName(new URL(origin).host) !== siteName(req.get("host") || "");
+    } catch {
+      crossSite = false;
+    }
+  }
   return {
     httpOnly: true,
-    secure: env.NODE_ENV === "production",
-    sameSite: "lax" as const,
+    secure: env.NODE_ENV === "production" || crossSite,
+    sameSite: crossSite ? "none" as const : "lax" as const,
     path: "/",
   };
 }
 
 export function setSessionCookies(res: Response, env: Env, accessToken: string, refreshToken: string) {
-  const base = cookieBase(env);
+  const base = cookieBase(env, res);
   res.cookie(ACCESS_COOKIE, accessToken, { ...base, maxAge: env.ACCESS_TOKEN_MINUTES * 60 * 1000 });
   res.cookie(REFRESH_COOKIE, refreshToken, { ...base, maxAge: env.REFRESH_TOKEN_DAYS * 24 * 60 * 60 * 1000 });
 }
 
 export function clearSessionCookies(res: Response, env: Env) {
-  const base = cookieBase(env);
+  const base = cookieBase(env, res);
   res.clearCookie(ACCESS_COOKIE, base);
   res.clearCookie(REFRESH_COOKIE, base);
 }

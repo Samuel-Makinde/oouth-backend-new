@@ -78,6 +78,18 @@ describe("hospital API", () => {
     const wrong = await request(app).post("/api/auth/login").send({ email: patient.email, password: "wrong-password" });
     expect(unknown.status).toBe(401);
     expect(wrong.status).toBe(401);
+    const proxied = await request(app)
+      .post("/api/auth/register")
+      .set("Host", "oouth-backend-new.onrender.com")
+      .set("Origin", "http://localhost:3000")
+      .set("X-Forwarded-For", "203.0.113.10, 172.68.23.41, 10.30.102.144")
+      .set("X-Forwarded-Proto", "https")
+      .send({ ...patient, email: `proxy.${Date.now()}@patients.oouth.local`, phone: "08030000099" });
+    expect(proxied.status).toBe(201);
+    const setCookie = proxied.headers["set-cookie"];
+    const cookies = Array.isArray(setCookie) ? setCookie.join(";") : setCookie ?? "";
+    expect(cookies).toMatch(/SameSite=None/i);
+    expect(cookies).toMatch(/Secure/i);
     expect(unknown.body.error.message).toBe(wrong.body.error.message);
     const reset = await request(app).post("/api/auth/password-reset").send({ email: patient.email });
     expect(reset.status).toBe(202);
