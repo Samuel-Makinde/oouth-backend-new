@@ -587,11 +587,16 @@ model Counter {
 }
 
 model CatalogMedication {
-  code     String @id
-  name     String
-  category String
-  form     String
-  strength String
+  code         String @id
+  name         String
+  category     String
+  form         String
+  strength     String
+  route        String @default("")
+  strengthUnit String @default("")
+  aware        String @default("")
+  safetyNote   String @default("")
+  ingredients  String @default("")
 }
 
 model CatalogDiagnosis {
@@ -609,7 +614,10 @@ model CatalogImaging {
 }
 
 model CatalogLaboratory {
-  code   String @id
-  name   String
-  sample String
+  code                String @id
+  name                String
+  sample              String
+  section             String @default("")
+  corporatePriceNaira Int    @default(0)
+  priceNote           String @default("")
 }

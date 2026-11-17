@@ -52,6 +52,6 @@ export const openApiDocument = {
     "/nursing/observation-orders": { post: { summary: "Set an observation order", tags: ["Nursing"] } },
     "/nursing/observations": { post: { summary: "Record observations", tags: ["Nursing"] } },
     "/nursing/handovers": { post: { summary: "Save a handover", tags: ["Nursing"] } },
-    "/ratings": { post: { summary: "Rate a completed consultation", tags: ["Ratings"] } },
+    "/ratings": { post: { summary: "Rate a consultation after the call ends", tags: ["Ratings"] } },
   },
 };

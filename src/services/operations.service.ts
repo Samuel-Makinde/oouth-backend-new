@@ -486,13 +486,13 @@ export function createOperationsService(prisma: PrismaClient) {
       if (message) throw badRequest(message);
       const appointment = await prisma.appointment.findUnique({ where: { id: input.appointmentId } });
       if (!appointment || appointment.patientUserId !== actor.id) throw forbidden("You can only rate your own visit.");
-      if (appointment.status !== "completed") throw forbidden("Rate a consultation after it is completed.");
+      const endedCall = await prisma.call.findFirst({ where: { appointmentId: appointment.id, status: "ended" } });
+      if (appointment.status !== "completed" && !endedCall) throw forbidden("Rate a consultation after the call ends.");
       const encounter = await prisma.encounter.findFirst({ where: { appointmentId: appointment.id }, orderBy: { version: "desc" } });
-      if (!encounter) throw forbidden("The consultation summary is not available yet.");
       const existing = await prisma.rating.findUnique({ where: { appointmentId: appointment.id } });
       if (existing) throw conflict("This consultation already has a rating.");
       const created = await prisma.rating.create({
-        data: { appointmentId: appointment.id, patientUserId: actor.id, consultantSlug: appointment.consultantSlug, encounterId: encounter.id, overall: input.overall, communication: input.communication, professionalism: input.professionalism, attention: input.attention, feedback: input.feedback.trim() },
+        data: { appointmentId: appointment.id, patientUserId: actor.id, consultantSlug: appointment.consultantSlug, encounterId: encounter?.id ?? "", overall: input.overall, communication: input.communication, professionalism: input.professionalism, attention: input.attention, feedback: input.feedback.trim() },
       });
       await writeAudit(prisma, actor.id, "rating.create", `Rated ${appointment.reference}`, { type: "rating", id: created.id });
       return publicRating(created);
@@ -788,10 +788,10 @@ export function createOperationsService(prisma: PrismaClient) {
     async catalog(kind: "medications" | "diagnoses" | "imaging-studies" | "laboratory-tests", actorId: string) {
       const actor = await requireUser(prisma, actorId);
       if (!["consultant", "administrator", "pharmacist", "laboratory_officer"].includes(actor.role)) throw forbidden("You cannot open this catalog.");
-      if (kind === "medications") return prisma.catalogMedication.findMany({ orderBy: { name: "asc" } });
+      if (kind === "medications") return prisma.catalogMedication.findMany({ orderBy: [{ name: "asc" }, { form: "asc" }, { strength: "asc" }] });
       if (kind === "diagnoses") return prisma.catalogDiagnosis.findMany({ orderBy: { name: "asc" } });
       if (kind === "imaging-studies") return prisma.catalogImaging.findMany({ orderBy: { name: "asc" } });
-      return prisma.catalogLaboratory.findMany({ orderBy: { name: "asc" } });
+      return prisma.catalogLaboratory.findMany({ orderBy: [{ section: "asc" }, { name: "asc" }] });
     },
 
     async departments(query: { group?: string; booking?: string }) {

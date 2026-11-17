@@ -18,6 +18,8 @@ async function main() {
   await connectDatabase();
   const { ensurePreviewCatalog } = await import("./bootstrap/ensure-catalog");
   await ensurePreviewCatalog(prisma, env.DEMO_STAFF_PASSWORD);
+  const { ensureCorporateCatalog } = await import("./bootstrap/ensure-corporate-catalog");
+  await ensureCorporateCatalog(prisma);
   const { createApp } = await import("./app");
   const { createInlineQueue, createMailer, createObjectStorage, createPaystack, createRedisQueue } = await import("./providers");
   const mailer = createMailer(env);

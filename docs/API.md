@@ -363,11 +363,11 @@ Socket.IO on the same API origin authenticates the `oouth_access` cookie. Signal
 
 ### GET /api/catalog/:kind
 
-- Purpose: list a clinical catalog. `kind` is `medications`, `diagnoses`, `imaging-studies`, or `laboratory-tests`.
+- Purpose: list a clinical catalog. `kind` is `medications`, `diagnoses`, `imaging-studies`, or `laboratory-tests`. Laboratory rows include the corporate price from the hospital tariff. Medicine rows are one product for each generic name, strength, and dosage form. Startup creates a missing row and updates a matching medicine code from the adult catalogue. The catalogue does not store a dose.
 - Permission: consultant, administrator, pharmacist, or laboratory officer.
 - Request body: none.
-- Response example: `{ "data": [{ "code": "PARA-500", "name": "Paracetamol" }] }`
-- Errors: 403.
+- Response example: `{ "data": [{ "code": "PARA-500", "name": "Paracetamol", "category": "Analgesic", "form": "Tablet", "strength": "500 mg", "route": "Oral", "strengthUnit": "mg", "aware": "", "safetyNote": "Check for another paracetamol product on this prescription. The strength is the product, not the dose.", "ingredients": "" }] }`
+- Errors: 403. A medicine response does not include a price. A laboratory response looks like `{ "code": "FBC", "name": "FBC", "sample": "Blood", "section": "haematology", "corporatePriceNaira": 10000, "priceNote": "" }`.
 
 ### GET /api/encounters/:id/handoff
 
@@ -682,11 +682,11 @@ Desk payments are a hospital ledger. They do not call Paystack.
 
 ### POST /api/ratings
 
-- Purpose: rate one completed visit. One rating per appointment.
+- Purpose: rate one visit after the call ends, or after the visit is completed. One rating per appointment. The scores stay 1 to 5. The patient screen shows those scores as everyday words.
 - Permission: the patient who attended.
 - Request body: `{ "appointmentId": "uuid", "overall": 5, "communication": 5, "professionalism": 5, "attention": 4, "feedback": "Clear explanation." }`
 - Response example: `{ "data": { "id": "uuid", "overall": 5 } }`
-- Errors: 403 before the visit is completed. 409 when a rating already exists.
+- Errors: 403 before the call has ended and before the visit is completed. 409 when a rating already exists. Skipping the rating does not call this route.
 
 ### GET /api/ratings
 

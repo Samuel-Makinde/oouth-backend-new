@@ -2,6 +2,10 @@
 
 ## 0.1.1
 
+- The consultation medicine catalogue lists each generic name, strength, and dosage form as its own product. A prescription dose is entered for the patient and is not copied from the product strength.
+- Corporate investigation prices are stored on the laboratory catalog. A missing test or medicine is created at startup so the consultation catalog can show it.
+- A patient can rate a consultation after the call ends, including before the note is signed. Skipping the rating does not save one.
+- Desk officers 2 and 3 collect pharmacy, laboratory, and scan work for physical visits only.
 - A verified virtual visit can start an audio or video call before its scheduled time. The call screen shows the server’s reason when the call service rejects the attempt.
 - While Paystack is not configured, Pay with Paystack records the visit payment as verified and the booking screens show a payment-successful popup.
 - Production startup applies Prisma migrations and, on an empty database, loads departments, fees, and preview staff so patient registration has a `User` table.
