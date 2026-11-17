@@ -274,7 +274,7 @@ A route below lists only the errors that are specific to it. The shared errors s
 - Response example: `{ "data": { "iceServers": [{ "urls": "stun:stun.l.google.com:19302" }], "turn": "off" } }`
 - Errors: 401 when the access cookie is missing. `turn` is `incomplete` when only some TURN variables are set, and the response still contains STUN. TURN secrets are not written to logs.
 
-Socket.IO on the same API origin authenticates the `oouth_access` cookie. Signaling events are `call:initiate`, `call:incoming`, `call:accept`, `call:accepted`, `call:reject`, `call:rejected`, `call:cancel`, `call:cancelled`, `call:end`, `call:ended`, `call:missed`, `call:error`, `call:fail`, `webrtc:offer`, `webrtc:answer`, `webrtc:ice-candidate`, `user:online`, and `user:offline`. Media does not travel on the socket. Only the patient and the assigned consultant of a virtual, paid visit inside the join window can start a call, and only those two users can exchange descriptions and ICE candidates.
+Socket.IO on the same API origin authenticates the `oouth_access` cookie. Signaling events are `call:initiate`, `call:incoming`, `call:accept`, `call:accepted`, `call:reject`, `call:rejected`, `call:cancel`, `call:cancelled`, `call:end`, `call:ended`, `call:missed`, `call:error`, `call:fail`, `webrtc:offer`, `webrtc:answer`, `webrtc:ice-candidate`, `user:online`, and `user:offline`. Media does not travel on the socket. Only the patient and the assigned consultant of a verified virtual visit can start a call, including a visit booked for a later time, and only those two users can exchange descriptions and ICE candidates.
 
 ### PUT /api/appointments/:id/record
 

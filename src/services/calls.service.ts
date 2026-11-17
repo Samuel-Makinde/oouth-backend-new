@@ -2,7 +2,7 @@ import type { PrismaClient, User } from "@prisma/client";
 import type { Env } from "../config/env";
 import { writeAudit } from "../lib/audit";
 import { badRequest, conflict, forbidden, notFound } from "../lib/errors";
-import { requireUser, settings, SUPER_CONSULTANT_SLUG } from "./shared";
+import { requireUser, SUPER_CONSULTANT_SLUG } from "./shared";
 
 export const RING_MS = 45_000;
 
@@ -160,11 +160,6 @@ async function openAppointment(prisma: PrismaClient, appointmentId: string) {
     throw forbidden("This video room is not open.");
   }
   if (["cancelled", "completed", "no_show"].includes(appointment.status)) throw forbidden("This visit can no longer take a call.");
-  const hospital = await settings(prisma);
-  const start = appointment.startsAt.getTime() - hospital.joinMinutesBefore * 60_000;
-  const end = appointment.endsAt.getTime() + hospital.joinMinutesAfter * 60_000;
-  const now = Date.now();
-  if (now < start || now > end) throw forbidden("The join window is closed.");
   return appointment;
 }
 

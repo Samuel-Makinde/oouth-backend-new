@@ -2,6 +2,7 @@
 
 ## 0.1.1
 
+- A verified virtual visit can start an audio or video call before its scheduled time. The call screen shows the server’s reason when the call service rejects the attempt.
 - While Paystack is not configured, Pay with Paystack records the visit payment as verified and the booking screens show a payment-successful popup.
 - Production startup applies Prisma migrations and, on an empty database, loads departments, fees, and preview staff so patient registration has a `User` table.
 - Registration and login behind Render no longer fail when `X-Forwarded-For` is present. Express trusts one proxy hop, and session cookies use SameSite=None; Secure for a frontend on another site.
