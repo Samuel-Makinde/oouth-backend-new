@@ -1,0 +1,218 @@
+[
+  {
+    "slug": "accident-and-emergency",
+    "name": "Accident & Emergency",
+    "group": "clinical",
+    "patientBooking": true,
+    "summary": "Immediate care for illness and injury. This is not an online queue.",
+    "body": "The hospital’s published emergency text says medical officers care for illnesses or injuries that need immediate attention. Emergency physicians see unscheduled patients of all ages. Their first responsibility is resuscitation and stabilisation, then the investigations and treatment required in the acute phase. If you need emergency care, come to the hospital. Do not book it online."
+  },
+  {
+    "slug": "anaesthesia",
+    "name": "Anaesthesia & Intensive Care",
+    "group": "clinical",
+    "patientBooking": true,
+    "summary": "A department in its own right since December 1993.",
+    "body": "The Department of Anaesthesia came formally into being in December 1993, when Dr A. O. Oyegunle was appointed the first consultant anaesthetist and head of department on 1 December 1993. Before that date, anaesthesia was coordinated by other departments. Anaesthetic services were given by nurse anaesthetists, with occasional assistance from medically qualified anaesthetists, principally from University College Hospital, Ibadan."
+  },
+  {
+    "slug": "community-medicine",
+    "name": "Community Medicine & Primary Care",
+    "group": "clinical",
+    "patientBooking": true,
+    "summary": "Care for the person at home and in the community.",
+    "body": "The department is concerned with the total health of the individual in the home and in the community, and with comprehensive care for prevention and treatment. It describes primary health care as access to quality care delivered by a team of health professionals for patients and families of all ages."
+  },
+  {
+    "slug": "ent",
+    "name": "ENT / ORL",
+    "group": "clinical",
+    "patientBooking": true,
+    "summary": "Ear, nose, throat, and head and neck care.",
+    "body": "The department describes specialists in ear, nose and throat and head and neck problems, including head and neck surgery, sinus and allergy disorders, sleep-disordered breathing, voice disorders, hearing loss, dizziness and imbalance, and tinnitus. The Friday clinic note lists ENT/ORL procedure days."
+  },
+  {
+    "slug": "family-medicine",
+    "name": "Family Medicine",
+    "group": "clinical",
+    "patientBooking": true,
+    "summary": "Continuing care for the individual and the family.",
+    "body": "The department says it provides continuing and comprehensive health care for the individual and family, integrating biological, clinical, and behavioural sciences. The published scope covers all ages. On the Friday roster, Family Medicine is listed with Dr Ariba."
+  },
+  {
+    "slug": "laboratory",
+    "name": "Laboratory Services",
+    "group": "clinical",
+    "patientBooking": false,
+    "summary": "Chemical pathology, haematology, and medical microbiology.",
+    "body": "The hospital lists laboratory services as Chemical Pathology and Immunology, Haematology and Blood Transfusion, and Medical Microbiology and Parasitology. The Chief Medical Director’s statement also describes well-equipped laboratory services for diagnosis. Online consultant booking is not offered for the laboratory itself."
+  },
+  {
+    "slug": "medicine",
+    "name": "Medicine",
+    "group": "clinical",
+    "patientBooking": true,
+    "summary": "A foundation clinical department from December 1985.",
+    "body": "The Department of Medicine was established in December 1985 with the late Dr E. A. O. Fakoya as its first head of department, as part of the foundation units of the Obafemi Awolowo College of Health Sciences and OOUTH. The department provides clinical services and training for medical students and postgraduate resident doctors. Neurology and nephrology consultants named on the public site are listed with this department because the website does not publish separate department pages for those specialties."
+  },
+  {
+    "slug": "nursing",
+    "name": "Nursing Services",
+    "group": "clinical",
+    "patientBooking": false,
+    "summary": "Personal care, safety, and support through illness.",
+    "body": "The published nursing text describes personalising care, supporting each patient’s capacity and limits, protecting safety and comfort, and assisting restoration to the fullest capacity. Nursing is not an online consultant-booking service."
+  },
+  {
+    "slug": "obstetrics-and-gynaecology",
+    "name": "Obstetrics & Gynaecology",
+    "group": "clinical",
+    "patientBooking": true,
+    "summary": "Pregnancy, childbirth, and women’s reproductive health.",
+    "body": "The department describes care of women during pregnancy and childbirth, treatment of diseases of the female reproductive organs, and other women’s health issues including menopause, hormones, contraception, and infertility. The Friday roster lists an antenatal and gynaecology clinic and a PMTCT clinic."
+  },
+  {
+    "slug": "ophthalmology",
+    "name": "Ophthalmology",
+    "group": "clinical",
+    "patientBooking": true,
+    "summary": "Eye and visual-system care. A full department since April 1999.",
+    "body": "Ophthalmology started as a unit in 1986, with Dr Quadri running the eye clinic once a week on a voluntary basis. Dr (Mrs) Onabolu later joined as an honorary consultant. The unit became a full department in April 1999. The department says it has trained nine consultant ophthalmologists. Its work is the diagnosis, treatment, and prevention of diseases of the eye and visual system. The Friday roster names a general clinic with Dr Ajibode and Dr (Mrs) Bodunde."
+  },
+  {
+    "slug": "orthopaedics",
+    "name": "Orthopaedics & Trauma",
+    "group": "clinical",
+    "patientBooking": true,
+    "summary": "Bones, joints, and injuries.",
+    "body": "The department describes prevention, diagnosis, and treatment of disorders of the bones, joints, ligaments, tendons, and muscles, and the surgical care of wounds and injuries, with the aim of restoring mobility."
+  },
+  {
+    "slug": "paediatrics",
+    "name": "Paediatrics",
+    "group": "clinical",
+    "patientBooking": true,
+    "summary": "A foundation children’s department from January 1986.",
+    "body": "Paediatrics started in January 1986 as one of the foundation clinical departments, with a single children’s ward of 10 cots. By July 1986 the department had acquired 3 additional beds and 2 phototherapy units. The initial staff recorded on the website were 1 consultant, 4 senior house officers or registrars, 3 house officers, 1 senior nursing sister, 3 sisters, and 8 staff nurses. The Friday roster lists neonatology and a children’s tuberculosis clinic."
+  },
+  {
+    "slug": "pharmacy",
+    "name": "Pharmacy",
+    "group": "clinical",
+    "patientBooking": false,
+    "summary": "Dispensing, counselling, and advice on prescribed medicines.",
+    "body": "The website describes the outpatient pharmacy as often the last place a patient visits. Pharmacists counsel patients on how to use prescribed medicines and on expected side effects, and they advise prescribers on interactions and contraindications. Online consultant booking is not offered for pharmacy."
+  },
+  {
+    "slug": "physiotherapy",
+    "name": "Physiotherapy",
+    "group": "clinical",
+    "patientBooking": true,
+    "summary": "Inherited from General Hospital, Sagamu in 1986.",
+    "body": "Physiotherapy was one of the departments inherited from General Hospital, Sagamu at the inception of OOUTH in 1986. It was formerly an old gymnasium and was later expanded under Mrs I. S. Afolabi, the former head of department. The Chief Medical Director’s statement describes physiotherapy as support for recovery from injury or illness, and records the Asiwaju S. K. Onafowokan Physiotherapy Building, with its foundation laid in November 2023."
+  },
+  {
+    "slug": "radiology",
+    "name": "Radiology",
+    "group": "clinical",
+    "patientBooking": true,
+    "summary": "Diagnosis and treatment using medical imaging.",
+    "body": "The department describes diagnosis and treatment using x-rays, computed tomography, magnetic resonance imaging, nuclear medicine, positron emission tomography, fusion imaging, and ultrasound. The Friday roster lists radiology with Dr (Mrs) Olatunji and Dr Toyobo. Booking a radiology consultant online is separate from booking a diagnostic test, and test booking is not part of this site."
+  },
+  {
+    "slug": "surgery",
+    "name": "Surgery",
+    "group": "clinical",
+    "patientBooking": true,
+    "summary": "Listed by the hospital. A longer profile is not published.",
+    "body": "The OOUTH website names a Department of Surgery and does not publish a department history for it. The Chief Medical Director’s statement says the hospital provides surgical services. The Friday clinic roster names General Surgery II and a urology clinic. Those roster names are clinic information, not full consultant profiles."
+  },
+  {
+    "slug": "accounts",
+    "name": "Accounts",
+    "group": "non-clinical",
+    "patientBooking": false,
+    "summary": "Cash points, disbursement, and salaries.",
+    "body": "The department describes collection of funds at cash points that run 24 hours across morning, afternoon, and night shifts, disbursement and safeguarding of hospital assets, and preparation and payment of staff salaries and allowances."
+  },
+  {
+    "slug": "administration",
+    "name": "Directorate of Administration",
+    "group": "non-clinical",
+    "patientBooking": false,
+    "summary": "Daily operations, budgets, and management systems.",
+    "body": "The directorate describes coordination of daily operations, management systems, budgets, supervision, efficiency, audit requests, and analysis of financial data."
+  },
+  {
+    "slug": "engineering",
+    "name": "Engineering",
+    "group": "non-clinical",
+    "patientBooking": false,
+    "summary": "Equipment, power, water, and transport.",
+    "body": "The department’s stated work is to return damaged or faulty equipment to use, keep electricity and water supply regular, keep transport moving within and outside town, and advise management on technical and engineering matters."
+  },
+  {
+    "slug": "research-institute",
+    "name": "Post Graduate Health Research Institute",
+    "group": "non-clinical",
+    "patientBooking": false,
+    "summary": "A joint institute of OOU, Ago-Iwoye and OOUTH.",
+    "body": "The Postgraduate Health Research Institute, Sagamu is described as a joint institution of Olabisi Onabanjo University, Ago-Iwoye and OOUTH. It is presented as a place where basic sciences and clinical practice meet, and where graduate scientists and physicians train."
+  },
+  {
+    "slug": "information-technology",
+    "name": "Information Technology",
+    "group": "non-clinical",
+    "patientBooking": false,
+    "summary": "Support for hospital IT facilities.",
+    "body": "The unit is responsible for maintenance and technical support of IT facilities. The published priorities are network improvements, system stability, and dependable email."
+  },
+  {
+    "slug": "internal-audit",
+    "name": "Internal Audit",
+    "group": "non-clinical",
+    "patientBooking": false,
+    "summary": "A control function reporting through the Chief Medical Director.",
+    "body": "Internal Audit was established by the Board of Management at the inception of the teaching hospital to help safeguard assets and to check that liabilities are accurate. The department is responsible to the Board through the Chief Medical Director."
+  },
+  {
+    "slug": "laundry",
+    "name": "Laundry",
+    "group": "non-clinical",
+    "patientBooking": false,
+    "summary": "Linen and window blinds.",
+    "body": "The laundry dates from the foundation of the institution. Its published responsibility is washing, cleaning, and maintaining bed sheets and window blinds."
+  },
+  {
+    "slug": "medical-social-services",
+    "name": "Medical Social Services",
+    "group": "non-clinical",
+    "patientBooking": false,
+    "summary": "Established in September 1990.",
+    "body": "Medical Social Services was established in September 1990 with the employment of a medical social worker. The department is concerned with patients’ welfare in and outside the hospital, including personal and emotional difficulties associated with illness and the use of medical services."
+  },
+  {
+    "slug": "security",
+    "name": "Security",
+    "group": "non-clinical",
+    "patientBooking": false,
+    "summary": "Started in 1987.",
+    "body": "Security started in 1987. The website says the early service was provided by gatemen and that, after ten years, Captain Ogunsola Femi (retired) was employed as head of department and led it for another ten years. During that period the hospital employed and trained security officers, some of them former service members."
+  },
+  {
+    "slug": "tailoring",
+    "name": "Tailoring",
+    "group": "non-clinical",
+    "patientBooking": false,
+    "summary": "Making, repair, and alteration of clothing.",
+    "body": "The unit describes professional measurement, repair and alteration, and tailoring for the organisation’s needs."
+  },
+  {
+    "slug": "corporate-communications",
+    "name": "Information, Communication and Corporate Services",
+    "group": "non-clinical",
+    "patientBooking": false,
+    "summary": "Public communication, reporting to the Chief Medical Director.",
+    "body": "The department implements public relations and the hospital’s internal and external communication. It reports to the Chief Medical Director and is divided into Protocol and Passage, Media and Publicity, and Marketing."
+  }
+]

@@ -1,11 +1,23 @@
+import { execFileSync } from "node:child_process";
+import { existsSync } from "node:fs";
 import { createServer } from "node:http";
+import path from "node:path";
 import { loadDotEnv, loadEnv } from "./config/env";
+
+function applyMigrations() {
+  const cli = path.resolve(process.cwd(), "node_modules/prisma/build/index.js");
+  if (!existsSync(cli)) throw new Error("Prisma CLI is not installed, so the database schema cannot be created.");
+  execFileSync(process.execPath, [cli, "migrate", "deploy"], { stdio: "inherit" });
+}
 
 async function main() {
   loadDotEnv();
   const env = loadEnv();
-  const { connectDatabase } = await import("./lib/prisma");
+  if (env.NODE_ENV === "production") applyMigrations();
+  const { connectDatabase, prisma } = await import("./lib/prisma");
   await connectDatabase();
+  const { ensurePreviewCatalog } = await import("./bootstrap/ensure-catalog");
+  await ensurePreviewCatalog(prisma, env.DEMO_STAFF_PASSWORD);
   const { createApp } = await import("./app");
   const { createInlineQueue, createMailer, createObjectStorage, createPaystack, createRedisQueue } = await import("./providers");
   const mailer = createMailer(env);
