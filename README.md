@@ -17,7 +17,7 @@ npx tsx prisma/seed.ts
 npm run dev
 ```
 
-Set `DATABASE_URL` in `.env` to a database you can create. The API listens on port 4000. Swagger is at `http://localhost:4000/api/docs`. Every route is documented in `docs/API.md`.
+Set `DATABASE_URL` in `.env` to a database you can create. The API connects with that URL only. `PGHOST`, `PGUSER`, `PGPORT`, and `PGDATABASE` stay in `.env` for `npm run db:azure` and are not used at startup. A successful start prints `Database connected using DATABASE_URL` with the host, port, and database name. The API listens on port 4000. Swagger is at `http://localhost:4000/api/docs`. Consultation calls use Socket.IO on that same origin. Set `TURN_SERVER_URL`, `TURN_USERNAME`, and `TURN_CREDENTIAL` when a TURN relay is available. Leave them blank to use STUN only. Every route is documented in `docs/API.md`.
 
 Azure Database for PostgreSQL on `db-aro.postgres.database.azure.com` uses a Microsoft Entra token as the password. Set `PGUSER` to the Entra admin, install Azure CLI, run `az login`, then `npm run db:azure`. That writes `DATABASE_URL` with `sslmode=require`. The token expires in about one hour, so run the command again when the API can no longer connect. Generate `JWT_ACCESS_SECRET`, `JWT_REFRESH_SECRET`, and `VIDEO_TOKEN_SECRET` locally with `node -e "console.log(require('crypto').randomBytes(32).toString('base64url'))"`. `VIDEO_TOKEN_SECRET` is not issued by WebRTC. The browser still opens the camera with `getUserMedia`. The API only signs a short-lived HMAC token with that secret. Paystack keys that contain `dummy` are treated as unset, so card payment stays unavailable until a real secret is added.
 

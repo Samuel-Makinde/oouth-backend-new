@@ -8,6 +8,7 @@ import { unauthorized } from "../lib/errors";
 import { prisma } from "../lib/prisma";
 import { publicNotification } from "../lib/present";
 import { createAppointmentService } from "../services/appointments.service";
+import { buildIceConfig } from "../services/calls.service";
 import { createAuthService } from "../services/auth.service";
 import { createEncounterService } from "../services/encounters.service";
 import { createOperationsService } from "../services/operations.service";
@@ -71,6 +72,7 @@ export function createRouter(env: Env, mailer: Mailer, storage: ObjectStorage, p
   router.post("/appointments/:id/triage", protect(env), asyncHandler(async (req, res) => sendData(res, await appointments.triage(req.actor!.id, req.params.id, req.body))));
   router.post("/appointments/:id/presence", protect(env), asyncHandler(async (req, res) => sendData(res, await appointments.presence(req.actor!.id, req.params.id, req.body))));
   router.post("/appointments/:id/video-token", protect(env), asyncHandler(async (req, res) => sendData(res, await appointments.videoToken(req.actor!.id, req.params.id))));
+  router.get("/calls/ice-config", protect(env), asyncHandler(async (_req, res) => sendData(res, buildIceConfig(env))));
   router.put("/appointments/:id/record", protect(env), asyncHandler(async (req, res) => sendData(res, await encounters.saveRecord(req.actor!.id, req.params.id, req.body))));
   router.patch("/appointments/:id/encounter", protect(env), asyncHandler(async (req, res) => sendData(res, await encounters.patchDraft(req.actor!.id, req.params.id, req.body))));
   router.post("/appointments/:id/encounter/sign", protect(env), asyncHandler(async (req, res) => sendData(res, await encounters.sign(req.actor!.id, req.params.id, req.body))));

@@ -2,6 +2,8 @@
 
 ## 0.1.1
 
+- Added consultation audio and video calls. Socket.IO signals the patient and assigned consultant. WebRTC carries the media. `GET /api/calls/ice-config` returns STUN and optional TURN servers from the environment.
+- Startup now connects Prisma with `DATABASE_URL` only and logs the host, port, and database name. `PGHOST`, `PGUSER`, `PGPORT`, and `PGDATABASE` remain for `npm run db:azure`.
 - Pointed local setup at Azure Database for PostgreSQL through `npm run db:azure`, which builds `DATABASE_URL` from a Microsoft Entra access token.
 - Generated the access, refresh, and video HMAC secrets in `.env`. Dummy Paystack keys stay unset for live charges.
 

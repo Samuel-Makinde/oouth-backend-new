@@ -11,6 +11,7 @@
 - Pharmacy dispense with stock checks, diagnostics, nursing administrations, observations, handovers, beds, and admissions
 - Ratings, fees, policies, staff, consultant booking, and an administrator session switch that is audited
 - Role-filtered workspace snapshot for the frontend cache
+- Consultation audio and video calls between the patient and the assigned consultant, with call history and one active call per person
 - Short-lived HMAC video token with no third-party room and no recording
 - Audit rows for mutations
 - Swagger at `/api/docs`

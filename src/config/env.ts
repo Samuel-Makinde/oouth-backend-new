@@ -20,6 +20,9 @@ const schema = z.object({
   SMTP_FROM: z.string().default("OOUTH <no-reply@oouth.local>"),
   REDIS_URL: z.string().default(""),
   DEMO_STAFF_PASSWORD: z.string().min(8).default("Preview#2026"),
+  TURN_SERVER_URL: z.string().default(""),
+  TURN_USERNAME: z.string().default(""),
+  TURN_CREDENTIAL: z.string().default(""),
 });
 
 export type Env = z.infer<typeof schema>;

@@ -32,6 +32,7 @@ export const openApiDocument = {
     "/appointments/{id}/direct": { post: { summary: "Direct a visit to a demo consultant", tags: ["Appointments"] } },
     "/appointments/{id}/presence": { post: { summary: "Update video room presence", tags: ["Appointments"] } },
     "/appointments/{id}/video-token": { post: { summary: "Issue a short-lived video token", tags: ["Appointments"] } },
+    "/calls/ice-config": { get: { summary: "WebRTC ICE servers for the signed-in user", tags: ["Calls"], security: [{ cookieAuth: [] }] } },
     "/appointments/{id}/record": { put: { summary: "Save a clinical record", tags: ["Records"] } },
     "/appointments/{id}/encounter": { patch: { summary: "Save encounter draft fields", tags: ["Records"] }, get: { summary: "Read encounter versions", tags: ["Records"] } },
     "/appointments/{id}/encounter/sign": { post: { summary: "Sign a consultation version", tags: ["Records"] } },
