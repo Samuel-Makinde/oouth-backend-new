@@ -600,17 +600,21 @@ model CatalogMedication {
 }
 
 model CatalogDiagnosis {
-  code     String @id
-  name     String
-  system   String
-  category String
+  code        String @id
+  name        String
+  system      String
+  category    String
+  conceptType String @default("disease")
+  synonyms    String @default("")
 }
 
 model CatalogImaging {
-  code       String @id
-  name       String
-  modality   String
-  bodyRegion String
+  code          String @id
+  name          String
+  modality      String
+  bodyRegion    String
+  synonyms      String @default("")
+  selectionNote String @default("")
 }
 
 model CatalogLaboratory {
@@ -620,4 +624,6 @@ model CatalogLaboratory {
   section             String @default("")
   corporatePriceNaira Int    @default(0)
   priceNote           String @default("")
+  synonyms            String @default("")
+  selectionNote       String @default("")
 }

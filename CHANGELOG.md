@@ -3,6 +3,9 @@
 ## 0.1.1
 
 - The consultation medicine catalogue lists each generic name, strength, and dosage form as its own product. A prescription dose is entered for the patient and is not copied from the product strength.
+- The live consultation overview keeps a short patient history on the page, and each section opens for the rest of the detail.
+- Diagnoses and radiology examinations are stored as searchable catalogues and used when a consultant records a diagnosis or requests a scan.
+- The consultation laboratory list uses the investigation guide. Search matches the test name, abbreviation, specimen, or group. A panel stays one order. Tests that already have a corporate price keep it.
 - The production build regenerates the Prisma client before TypeScript compiles, so catalog fields such as laboratory `section` are present.
 - Corporate investigation prices are stored on the laboratory catalog. A missing test or medicine is created at startup so the consultation catalog can show it.
 - A patient can rate a consultation after the call ends, including before the note is signed. Skipping the rating does not save one.

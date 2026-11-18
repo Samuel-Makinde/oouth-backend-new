@@ -10,6 +10,9 @@
 - Signed consultations fan out to journeys, pharmacy lines, and investigation orders
 - Pharmacy dispense with stock checks, diagnostics, nursing administrations, observations, handovers, beds, and admissions
 - Adult medicine catalogue searched by generic name. Each strength and dosage form is its own product, and the prescribed dose is entered separately.
+- Diagnosis pick-list searched by name or synonym, with symptoms kept separate from diseases.
+- Radiology examination list for scan orders, searched by name, body region, or abbreviation. The doctor enters the side, views, and reason.
+- Laboratory investigation list for consultation orders, searched by name, abbreviation, specimen, or group. A corporate price stays on the matching test. The doctor enters the reason, preparation, and whether it is routine or urgent.
 - Corporate laboratory prices for haematology, chemical pathology, and microbiology, with the consultation medicine list stored when a drug is missing
 - Ratings after a call ends or a visit is completed, fees, policies, staff, consultant booking, and an administrator session switch that is audited
 - Role-filtered workspace snapshot for the frontend cache

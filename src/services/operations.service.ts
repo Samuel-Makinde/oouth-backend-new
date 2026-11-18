@@ -789,8 +789,8 @@ export function createOperationsService(prisma: PrismaClient) {
       const actor = await requireUser(prisma, actorId);
       if (!["consultant", "administrator", "pharmacist", "laboratory_officer"].includes(actor.role)) throw forbidden("You cannot open this catalog.");
       if (kind === "medications") return prisma.catalogMedication.findMany({ orderBy: [{ name: "asc" }, { form: "asc" }, { strength: "asc" }] });
-      if (kind === "diagnoses") return prisma.catalogDiagnosis.findMany({ orderBy: { name: "asc" } });
-      if (kind === "imaging-studies") return prisma.catalogImaging.findMany({ orderBy: { name: "asc" } });
+      if (kind === "diagnoses") return prisma.catalogDiagnosis.findMany({ orderBy: [{ category: "asc" }, { name: "asc" }] });
+      if (kind === "imaging-studies") return prisma.catalogImaging.findMany({ orderBy: [{ modality: "asc" }, { name: "asc" }] });
       return prisma.catalogLaboratory.findMany({ orderBy: [{ section: "asc" }, { name: "asc" }] });
     },
 
