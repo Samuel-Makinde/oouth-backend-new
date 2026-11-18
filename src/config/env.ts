@@ -27,6 +27,18 @@ const schema = z.object({
 
 export type Env = z.infer<typeof schema>;
 
+export function frontendOrigins(value: string) {
+  const origins = value.split(",").map((item) => item.trim().replace(/\/$/, "")).filter(Boolean);
+  return origins.length ? origins : ["http://localhost:3000"];
+}
+
+export function callbackOrigin(env: Env, requestOrigin?: string) {
+  const origins = frontendOrigins(env.FRONTEND_ORIGIN);
+  const requested = requestOrigin?.replace(/\/$/, "");
+  if (requested && origins.includes(requested)) return requested;
+  return origins.find((item) => item.startsWith("https://")) ?? origins[0];
+}
+
 export function loadDotEnv(file = ".env") {
   if (!fs.existsSync(file)) return;
   const text = fs.readFileSync(file, "utf8");

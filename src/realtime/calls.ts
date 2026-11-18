@@ -1,7 +1,7 @@
 import type { Server as HttpServer } from "node:http";
 import { Server, type Socket } from "socket.io";
 import { z } from "zod";
-import type { Env } from "../config/env";
+import { frontendOrigins, type Env } from "../config/env";
 import { accessCookieName, readAccessToken } from "../lib/auth";
 import { ApiError } from "../lib/errors";
 import { prisma } from "../lib/prisma";
@@ -26,7 +26,7 @@ const OFFLINE_GRACE_MS = 8_000;
 
 export function attachCallSocket(server: HttpServer, env: Env) {
   const io = new Server(server, {
-    cors: { origin: env.FRONTEND_ORIGIN, credentials: true },
+    cors: { origin: frontendOrigins(env.FRONTEND_ORIGIN), credentials: true },
   });
   const sockets = new Map<string, Set<string>>();
   const ringTimers = new Map<string, NodeJS.Timeout>();

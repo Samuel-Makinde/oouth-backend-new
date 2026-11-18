@@ -85,7 +85,7 @@ export function createRouter(env: Env, mailer: Mailer, storage: ObjectStorage, p
   router.get("/appointments/:id/encounter", protect(env), asyncHandler(async (req, res) => sendData(res, await encounters.read(req.actor!.id, req.params.id))));
   router.get("/appointments/:id/consultation-report", protect(env), asyncHandler(async (req, res) => sendData(res, await encounters.report(req.actor!.id, req.params.id))));
 
-  router.post("/payments/initialize", protect(env), asyncHandler(async (req, res) => sendData(res, await payments.initialize(req.actor!.id, req.body))));
+  router.post("/payments/initialize", protect(env), asyncHandler(async (req, res) => sendData(res, await payments.initialize(req.actor!.id, req.body, req.get("origin")))));
   router.post("/payments/verify", protect(env), asyncHandler(async (req, res) => sendData(res, await payments.verify(req.actor!.id, req.body))));
   router.post("/payments/webhook", asyncHandler(async (req, res) => sendData(res, await payments.webhook(req.body as Buffer, req.header("x-paystack-signature")))));
 

@@ -1,7 +1,7 @@
 import { createHmac, randomBytes } from "node:crypto";
 import type { PrismaClient } from "@prisma/client";
 import { z } from "zod";
-import type { Env } from "../config/env";
+import { callbackOrigin, type Env } from "../config/env";
 import { notifyUser, writeAudit } from "../lib/audit";
 import { ApiError, badRequest, conflict, forbidden, notFound } from "../lib/errors";
 import { publicAppointment } from "../lib/present";
@@ -11,7 +11,7 @@ import { requireUser, slotKey } from "./shared";
 
 export function createPaymentService(prisma: PrismaClient, env: Env, paystack: PaystackClient) {
   return {
-    async initialize(userId: string, body: unknown) {
+    async initialize(userId: string, body: unknown, requestOrigin?: string) {
       const input = z.object({ appointmentId: z.string().uuid() }).parse(body);
       const user = await requireUser(prisma, userId);
       if (user.role !== "patient") throw forbidden("Only the patient can pay for this visit.");
@@ -35,7 +35,7 @@ export function createPaymentService(prisma: PrismaClient, env: Env, paystack: P
         amountKobo: amountNaira * 100,
         reference,
         metadata: { appointmentId: appointment.id, purpose },
-        callbackUrl: `${env.FRONTEND_ORIGIN}/patient/payments/return`,
+        callbackUrl: `${callbackOrigin(env, requestOrigin)}/patient/payments/return`,
       });
       await prisma.appointment.update({ where: { id: appointment.id }, data: { paymentReference: reference, paymentStatus: "pending_verification" } });
       await writeAudit(prisma, user.id, "payment.initialize", `Started ${reference} for ${appointment.reference}`, { type: "payment", id: reference });
