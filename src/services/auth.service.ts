@@ -51,8 +51,8 @@ export function createAuthService(prisma: PrismaClient, env: Env, mailer: Mailer
         await notifyUser(tx, created.id, "Account created", `Your patient number is ${created.patientNumber}.`, "/patient/dashboard");
         return created;
       });
-      await issueSession(prisma, env, res, user.id, user.role, user.email);
-      return { id: user.id, patientNumber: user.patientNumber, user: publicUser(user) };
+      const session = await issueSession(prisma, env, res, user.id, user.role, user.email);
+      return { id: user.id, patientNumber: user.patientNumber, user: publicUser(user), ...session };
     },
 
     async login(body: unknown, res: Response) {
@@ -61,14 +61,15 @@ export function createAuthService(prisma: PrismaClient, env: Env, mailer: Mailer
       if (!user || user.deletedAt || !user.active || !(await verifyPassword(user.passwordHash, input.password))) {
         throw unauthorized(SAME_LOGIN_ERROR);
       }
-      await issueSession(prisma, env, res, user.id, user.role, user.email);
+      const session = await issueSession(prisma, env, res, user.id, user.role, user.email);
       await writeAudit(prisma, user.id, "auth.sign-in", "Signed in");
-      return { user: publicUser(user) };
+      return { user: publicUser(user), ...session };
     },
 
-    async logout(userId: string | undefined, rawRefresh: string | undefined, res: Response) {
-      if (rawRefresh) {
-        await prisma.refreshToken.updateMany({ where: { tokenHash: hashToken(rawRefresh), revokedAt: null }, data: { revokedAt: new Date() } });
+    async logout(userId: string | undefined, refreshTokens: string[], res: Response) {
+      const hashes = [...new Set(refreshTokens.filter(Boolean).map((token) => hashToken(token)))];
+      if (hashes.length) {
+        await prisma.refreshToken.updateMany({ where: { tokenHash: { in: hashes }, revokedAt: null }, data: { revokedAt: new Date() } });
       }
       if (userId) await writeAudit(prisma, userId, "auth.sign-out", "Session closed");
       clearSessionCookies(res, env);
@@ -76,8 +77,8 @@ export function createAuthService(prisma: PrismaClient, env: Env, mailer: Mailer
 
     async refresh(rawRefresh: string | undefined, res: Response) {
       if (!rawRefresh) throw unauthorized();
-      const user = await rotateRefresh(prisma, env, res, rawRefresh);
-      return { user: publicUser(user) };
+      const rotated = await rotateRefresh(prisma, env, res, rawRefresh);
+      return { user: publicUser(rotated.user), accessToken: rotated.accessToken, refreshToken: rotated.refreshToken };
     },
 
     async me(userId: string) {

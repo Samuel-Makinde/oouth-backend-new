@@ -37,32 +37,32 @@ A route below lists only the errors that are specific to it. The shared errors s
 - Purpose: create a patient and a patient number.
 - Permission: public, rate limited.
 - Request body: `{ "firstName": "Ada", "lastName": "Okoye", "email": "ada@example.com", "phone": "08030000000", "dateOfBirth": "1990-01-01", "gender": "female", "address": "Sagamu", "password": "patient-secret" }`
-- Response example: `{ "data": { "id": "uuid", "role": "patient", "email": "ada@example.com", "patientNumber": "OOUTH-P-2026-0001" } }`
-- Errors: 409 when the email is already registered. Sets session cookies.
+- Response example: `{ "data": { "id": "uuid", "patientNumber": "OOUTH-P-2026-0001", "user": { "id": "uuid", "role": "patient", "email": "ada@example.com" }, "accessToken": "jwt", "refreshToken": "token" } }`
+- Errors: 409 when the email is already registered. Sets session cookies and also returns the two tokens so a phone that blocks the cookie can stay signed in.
 
 ### POST /api/auth/login
 
 - Purpose: open a session.
 - Permission: public, rate limited.
 - Request body: `{ "email": "ada@example.com", "password": "patient-secret" }`
-- Response example: `{ "data": { "id": "uuid", "role": "patient", "email": "ada@example.com" } }`
-- Errors: 401 `unauthorized` with the same message for an unknown email and a wrong password.
+- Response example: `{ "data": { "user": { "id": "uuid", "role": "patient", "email": "ada@example.com" }, "accessToken": "jwt", "refreshToken": "token" } }`
+- Errors: 401 `unauthorized` with the same message for an unknown email and a wrong password. The browser stores the two tokens and sends `Authorization: Bearer` on later requests. The session cookies are still set for a browser that accepts them.
 
 ### POST /api/auth/logout
 
 - Purpose: revoke the refresh session and clear both cookies.
 - Permission: public. A missing cookie still clears the browser cookies.
-- Request body: none.
+- Request body: optional `{ "refreshToken": "token" }` when the browser stored the token instead of the cookie.
 - Response example: `{ "data": { "ok": true } }`
 - Errors: none specific.
 
 ### POST /api/auth/refresh
 
-- Purpose: rotate the refresh cookie and issue a new access cookie.
-- Permission: valid `oouth_refresh` cookie.
-- Request body: none.
-- Response example: `{ "data": { "id": "uuid", "role": "patient" } }`
-- Errors: 401 when the refresh cookie is missing, expired, or already rotated.
+- Purpose: rotate the refresh session and issue a new access token.
+- Permission: valid `oouth_refresh` cookie, or the same token in the request body.
+- Request body: optional `{ "refreshToken": "token" }`.
+- Response example: `{ "data": { "user": { "id": "uuid", "role": "patient" }, "accessToken": "jwt", "refreshToken": "next-token" } }`
+- Errors: 401 when the refresh token is missing, expired, or already rotated.
 
 ### POST /api/auth/password-reset
 

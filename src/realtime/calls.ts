@@ -34,7 +34,8 @@ export function attachCallSocket(server: HttpServer, env: Env) {
   const signalHits = new Map<string, number[]>();
 
   io.use((socket, next) => {
-    const token = cookieValue(socket.handshake.headers.cookie, accessCookieName());
+    const presented = socket.handshake.auth?.token;
+    const token = (typeof presented === "string" ? presented : "") || cookieValue(socket.handshake.headers.cookie, accessCookieName());
     const payload = token ? readAccessToken(env, token) : null;
     if (!payload) {
       next(new Error("Sign in to continue."));

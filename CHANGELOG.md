@@ -6,6 +6,8 @@
 - The live consultation overview keeps a short patient history on the page, and each section opens for the rest of the detail.
 - Diagnoses and radiology examinations are stored as searchable catalogues and used when a consultant records a diagnosis or requests a scan.
 - The consultation laboratory list uses the investigation guide. Search matches the test name, abbreviation, specimen, or group. A panel stays one order. Tests that already have a corporate price keep it.
+- A consultant who accepts a patient’s call is taken to that visit’s consultation page. The video stays on that page with the history and clinical notes.
+- Sign-in returns an access token and a refresh token as well as the session cookies. A phone that blocks the cross-site cookie can stay signed in by sending that token.
 - The production build regenerates the Prisma client before TypeScript compiles, so catalog fields such as laboratory `section` are present.
 - Corporate investigation prices are stored on the laboratory catalog. A missing test or medicine is created at startup so the consultation catalog can show it.
 - A patient can rate a consultation after the call ends, including before the note is signed. Skipping the rating does not save one.

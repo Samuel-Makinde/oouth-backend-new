@@ -14,9 +14,10 @@
 - Radiology examination list for scan orders, searched by name, body region, or abbreviation. The doctor enters the side, views, and reason.
 - Laboratory investigation list for consultation orders, searched by name, abbreviation, specimen, or group. A corporate price stays on the matching test. The doctor enters the reason, preparation, and whether it is routine or urgent.
 - Corporate laboratory prices for haematology, chemical pathology, and microbiology, with the consultation medicine list stored when a drug is missing
+- Sign-in works on a phone when the browser blocks the session cookie. The site keeps the access token on that device and sends it with each request.
 - Ratings after a call ends or a visit is completed, fees, policies, staff, consultant booking, and an administrator session switch that is audited
 - Role-filtered workspace snapshot for the frontend cache
-- Consultation audio and video calls between the patient and the assigned consultant, with call history and one active call per person
+- Consultation audio and video calls between the patient and the assigned consultant, with call history and one active call per person. When a consultant accepts a call, the visit opens on the consultation page with the video beside the patient history and clinical notes.
 - Short-lived HMAC video token with no third-party room and no recording
 - Audit rows for mutations
 - Swagger at `/api/docs`

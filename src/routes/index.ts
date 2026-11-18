@@ -40,10 +40,10 @@ export function createRouter(env: Env, mailer: Mailer, storage: ObjectStorage, p
   router.post("/auth/login", limit, asyncHandler(async (req, res) => sendData(res, await auth.login(req.body, res))));
   router.post("/auth/logout", asyncHandler(async (req, res) => {
     const actor = await optionalActor(req, env);
-    await auth.logout(actor?.id, req.cookies?.[refreshCookieName()], res);
+    await auth.logout(actor?.id, refreshTokens(req), res);
     res.status(204).end();
   }));
-  router.post("/auth/refresh", asyncHandler(async (req, res) => sendData(res, await auth.refresh(req.cookies?.[refreshCookieName()], res))));
+  router.post("/auth/refresh", asyncHandler(async (req, res) => sendData(res, await auth.refresh(refreshTokens(req)[0], res))));
   router.post("/auth/password-reset", limit, asyncHandler(async (req, res) => sendData(res, await auth.requestReset(req.body), 202)));
   router.post("/auth/password-reset/confirm", asyncHandler(async (req, res) => sendData(res, await auth.confirmReset(req.body))));
   router.get("/auth/me", protect(env), asyncHandler(async (req, res) => sendData(res, await auth.me(req.actor!.id))));
@@ -145,8 +145,8 @@ export function createRouter(env: Env, mailer: Mailer, storage: ObjectStorage, p
   router.patch("/admin/consultants/:slug", protect(env), asyncHandler(async (req, res) => sendData(res, await operations.setBooking(req.actor!.id, req.params.slug, req.body))));
   router.post("/admin/staff/:id/session", protect(env), asyncHandler(async (req, res) => {
     const target = await operations.openStaff(req.actor!.id, req.params.id);
-    await issueSession(prisma, env, res, target.id, target.role, target.email);
-    sendData(res, { role: target.role, userId: target.id });
+    const session = await issueSession(prisma, env, res, target.id, target.role, target.email);
+    sendData(res, { role: target.role, userId: target.id, ...session });
   }));
   router.post("/admin/registration", protect(env), asyncHandler(async (req, res) => sendData(res, await operations.settleRegistration(req.actor!.id, req.body))));
   router.post("/admin/departments", protect(env), asyncHandler(async (req, res) => sendData(res, await operations.saveOperationalDepartment(req.actor!.id, req.body), 201)));
@@ -182,9 +182,14 @@ function protect(env: Env) {
 }
 
 async function optionalActor(req: AuthedRequest, env: Env) {
-  const token = req.cookies?.[accessCookieName()];
+  const token = req.cookies?.[accessCookieName()] || headerToken(req.header("authorization"));
   const payload = token ? readAccessToken(env, token) : null;
   return payload;
+}
+
+function refreshTokens(req: AuthedRequest) {
+  const fromBody = typeof req.body?.refreshToken === "string" ? req.body.refreshToken : "";
+  return [req.cookies?.[refreshCookieName()], fromBody].filter((token): token is string => Boolean(token));
 }
 
 function headerToken(value: string | undefined) {

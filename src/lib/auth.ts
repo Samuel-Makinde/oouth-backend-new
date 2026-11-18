@@ -106,6 +106,7 @@ export async function issueSession(prisma: PrismaClient, env: Env, res: Response
     },
   });
   setSessionCookies(res, env, accessToken, refreshToken);
+  return { accessToken, refreshToken };
 }
 
 export async function rotateRefresh(prisma: PrismaClient, env: Env, res: Response, rawToken: string) {
@@ -130,7 +131,7 @@ export async function rotateRefresh(prisma: PrismaClient, env: Env, res: Respons
   });
   const accessToken = signAccessToken(env, { id: user.id, role: user.role, email: user.email });
   setSessionCookies(res, env, accessToken, nextToken);
-  return user;
+  return { user, accessToken, refreshToken: nextToken };
 }
 
 export function signVideoToken(env: Env, input: { appointmentId: string; userId: string; expiresAt: Date }) {

@@ -72,6 +72,14 @@ describe("hospital API", () => {
     const created = await agent.post("/api/auth/register").send(patient);
     expect(created.status).toBe(201);
     expect(created.body.data.patientNumber).toMatch(/^OOUTH-P-/);
+    expect(created.body.data.accessToken).toEqual(expect.any(String));
+    const phone = await request(app).get("/api/auth/me").set("Authorization", `Bearer ${created.body.data.accessToken}`);
+    expect(phone.status).toBe(200);
+    expect(phone.body.data.email).toBe(patient.email);
+    const refreshed = await request(app).post("/api/auth/refresh").send({ refreshToken: created.body.data.refreshToken });
+    expect(refreshed.status).toBe(200);
+    const phoneAgain = await request(app).get("/api/auth/me").set("Authorization", `Bearer ${refreshed.body.data.accessToken}`);
+    expect(phoneAgain.status).toBe(200);
     const me = await agent.get("/api/auth/me");
     expect(me.status).toBe(200);
     expect(me.body.data.email).toBe(patient.email);
