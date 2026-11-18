@@ -22,7 +22,7 @@ const candidateBody = callIdBody.extend({
 });
 
 const calls = createCallService(prisma);
-const OFFLINE_GRACE_MS = 8_000;
+const OFFLINE_GRACE_MS = 45_000;
 
 export function attachCallSocket(server: HttpServer, env: Env) {
   const io = new Server(server, {

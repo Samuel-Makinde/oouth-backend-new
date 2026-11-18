@@ -7,6 +7,7 @@
 - Diagnoses and radiology examinations are stored as searchable catalogues and used when a consultant records a diagnosis or requests a scan.
 - The consultation laboratory list uses the investigation guide. Search matches the test name, abbreviation, specimen, or group. A panel stays one order. Tests that already have a corporate price keep it.
 - A consultant who accepts a patient’s call is taken to that visit’s consultation page. The video stays on that page with the history and clinical notes.
+- A dropped socket waits 45 seconds before an accepted call is ended, so opening the consultation page can finish the video connection.
 - Sign-in returns an access token and a refresh token as well as the session cookies. A phone that blocks the cross-site cookie can stay signed in by sending that token.
 - `FRONTEND_ORIGIN` accepts a comma-separated list, so localhost and the corporate site can both call the API. An answered call opens full screen and can be returned to the small window. Password fields can show the typed password.
 - The production build regenerates the Prisma client before TypeScript compiles, so catalog fields such as laboratory `section` are present.
